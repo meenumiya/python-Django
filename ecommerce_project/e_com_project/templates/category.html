@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{ category.description|truncatewords:150 }}
+    {% else %}
+         Welcome to ME&JO Cart where you can buy the things you want...
+    {% endif %}
+{% endblock %}
+{% block title %}
+{% if category %}
+        {{ category.name }} -ME&JO Cart
+    {% else %}
+         Cart your items....
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+    <div>
+        <div class="row my_row_class">
+            <div class="mx-auto">
+            <p><a href="{% url 'e_com_app:allprocat' %}"></a>All products</p>
+        </div>
+            </div>
+    </div>
+
+{% endif %}
+{% if category %}
+    <div>
+       <img src="{{category.image.url}}" alt="{{category.name}}">
+    </div>
+<br>
+    <div>
+        <h1>{{category.name}}</h1>
+        <p>{{category.description}}</p>
+    </div>
+{% else %}
+    <div>
+        <img src="{% static 'img/banner.png' %}" alt="our products" width="1100px;">
+    </div>
+    <div>
+        <h2>Our Product collections</h2>
+        <p>There are many variations of passages of Lorem Ipsum available,
+            but the majority have suffered alteration in some form, by injected humour,
+            or randomised words which don't look even slightly believable.
+            If you are going to use a passage of Lorem Ipsum,
+            you need to be sure there isn't anything embarrassing hidden in the middle of text.</p>
+    </div>
+{% endif %}
+    <div class="container">
+        <div class="row mx-auto">
+            {% for product in products.object_list %}
+            <div class="my_bottom_margin col-md-3">
+                <div class="card text-center" style="min-width:16rem;">
+                    <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}}" width="130px;" height="130px;"></a>
+                    <div class="card-body">
+                        <h4>{{product.name}}</h4>
+                        <p>{{product.price}}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="mx-auto">
+            {% if products.paginator.num_pages > 1 %}
+            <hr>
+            <div class="text-center">
+                {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <br>
+    </div>
+{% endblock %}
